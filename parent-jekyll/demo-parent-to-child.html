@@ -1,0 +1,31 @@
+<h1>This is the parent page.</h1>
+<p>Send Message: <button id="button--message">Send message to child</button></p>
+
+<figure>
+  <iframe id="element--iframe" src="http://localhost:3001/demo-parent-to-child" width="800px" height="600px" allowtransparency="true"></iframe>
+</figure>
+
+<script>
+  // addEventListener support for IE8
+  function bindEvent(element, eventName, eventHandler) {
+      if (element.addEventListener){
+          element.addEventListener(eventName, eventHandler, false);
+      } else if (element.attachEvent) {
+          element.attachEvent('on' + eventName, eventHandler);
+      }
+  }
+
+  var iframeElement = document.getElementById('element--iframe'),
+      messageButton = document.getElementById('button--message');
+
+  // Send a message to the child iframe
+  var sendMessage = function(message) {
+      iframeElement.contentWindow.postMessage(message, '*');
+  };
+
+  // Send random messge data on every button click
+  bindEvent(messageButton, 'click', function (e) {
+      var random = Math.random();
+      sendMessage('' + random);
+  });
+</script>

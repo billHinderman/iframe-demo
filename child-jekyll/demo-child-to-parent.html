@@ -1,0 +1,32 @@
+<style type="text/css">
+  body {
+    background: #f1c40f;
+  }
+</style>
+<h1>This is the child page.</h1>
+
+<p>Send Message: <button id="button--message">Send message to parent</button></p>
+
+<script>
+  function bindEvent(element, eventName, eventHandler) {
+      if (element.addEventListener){
+          element.addEventListener(eventName, eventHandler, false);
+      } else if (element.attachEvent) {
+          element.attachEvent('on' + eventName, eventHandler);
+      }
+  }
+
+  // Send a message to the parent
+  var sendMessage = function (message) {
+      window.parent.postMessage(message, '*');
+  };
+
+    // Send random message data on every button click
+    messageButton = document.getElementById('button--message');
+
+    
+    bindEvent(messageButton, 'click', function (e) {
+        var random = Math.random();
+        sendMessage('' + random);
+    });
+</script>

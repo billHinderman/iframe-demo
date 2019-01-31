@@ -1,0 +1,52 @@
+<h1>This is the parent page.</h1>
+
+<p>Send Message: <button id="button--message">Send message to child</button></p>
+<div id="results">
+  <h2>Message received:</h2>
+  <p id="results__message"></p>
+  <p id="results__timestamp"></p>
+</div>
+
+<figure>
+  <iframe id="element--iframe" src="http://localhost:3001/demo-object" width="800px" height="600px" allowtransparency="true"></iframe>
+</figure>
+
+<script>
+  // addEventListener support for IE8
+  function bindEvent(element, eventName, eventHandler) {
+      if (element.addEventListener){
+          element.addEventListener(eventName, eventHandler, false);
+      } else if (element.attachEvent) {
+          element.attachEvent('on' + eventName, eventHandler);
+      }
+  }
+
+  var iframeElement = document.getElementById('element--iframe'),
+      messageButton = document.getElementById('button--message');
+
+  // Send a message to the child iframe
+  var sendMessage = function(message) {
+    var stringifiedMessage = typeof(message) === "string" ? message : JSON.stringify(message);
+    iframeElement.contentWindow.postMessage(stringifiedMessage, '*');
+  };
+
+  // Send random messge data on every button click
+  bindEvent(messageButton, 'click', function (e) {
+      var object ={
+        key1: Math.random(),
+        key2: Math.random(),
+        key3: Math.random(),
+        key4: Math.random()
+      }
+      console.log({parent: object});
+      sendMessage(object);
+  });
+
+  // Listen to message from child window
+  bindEvent(window, 'message', function (e) {
+    console.log({parent: JSON.parse(e.data)});
+    results__message.innerHTML = e.data;
+    results__timestamp.innerHTML = new Date().toTimeString();
+  });
+
+</script>

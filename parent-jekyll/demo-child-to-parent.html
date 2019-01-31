@@ -1,0 +1,28 @@
+<h1>This is the parent page.</h1>
+<div id="results">
+  <h2>Message received:</h2>
+  <p id="results__message"></p>
+  <p id="results__timestamp"></p>
+</div>
+
+
+<figure>
+  <iframe src="http://localhost:3001/demo-child-to-parent" width="800px" height="600px" allowtransparency="true"></iframe>
+</figure>
+
+<script>
+  // addEventListener support for IE8
+  function bindEvent(element, eventName, eventHandler) {
+      if (element.addEventListener){
+          element.addEventListener(eventName, eventHandler, false);
+      } else if (element.attachEvent) {
+          element.attachEvent('on' + eventName, eventHandler);
+      }
+  }
+
+  // Listen to message from child window
+  bindEvent(window, 'message', function (e) {
+    results__message.innerHTML = e.data;
+    results__timestamp.innerHTML = new Date().toTimeString();
+  });
+</script>
